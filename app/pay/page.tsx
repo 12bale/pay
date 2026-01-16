@@ -45,95 +45,85 @@ export default function Home() {
   }, [totalSales, incentiveRate, internFee, calculate]);
 
   return (
-    <div className='p-4'>
-      <p className="mt-6 font-semibold">계산</p>
-      <div className="space-y-3">
-        <div>
-          <p>총매출</p>
-          <input
-            type="number"
-            value={totalSales || ''}
-            onChange={handleTotalSalesChange}
-            className="border p-2 w-full"
-          />
-        </div>
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-sm p-6">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">급여 계산기</h1>
 
-        {/* 1단계: 수수료 */}
-        <div>
-          <p>수수료 (85%)</p>
-          <input
-            type="text"
-            value={formatNumber(commission)}
-            readOnly
-            className="border p-2 w-full bg-gray-100"
-          />
-          <p className="text-sm text-gray-600 mt-1">
-            남은 금액: {formatNumber(afterCommission)}
-          </p>
-        </div>
+        <div className="space-y-4">
+          {/* 입력 섹션 */}
+          <div className="pb-4 border-b">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              총매출
+            </label>
+            <input
+              type="number"
+              value={totalSales || ''}
+              onChange={handleTotalSalesChange}
+              placeholder="0"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+          </div>
 
-        {/* 2단계: 인센티브 */}
-        <div>
-          <p>인센티브 (단위: %)</p>
-          <input
-            type="number"
-            value={incentiveRate || ''}
-            onChange={handleIncentiveRateChange}
-            className="border p-2 w-full"
-          />
-          <p className="text-sm text-gray-600 mt-1">
-            인센티브 금액: {formatNumber(incentive)}
-          </p>
-        </div>
+          <div className="pb-4 border-b">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              인센티브율 (%)
+            </label>
+            <input
+              type="number"
+              value={incentiveRate || ''}
+              onChange={handleIncentiveRateChange}
+              placeholder="0"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+          </div>
 
-        {/* 3단계: 재료비 */}
-        <div>
-          <p>재료비 (수수료 뺀 금액의 10%)</p>
-          <input
-            type="text"
-            value={formatNumber(materialCost)}
-            readOnly
-            className="border p-2 w-full bg-gray-100"
-          />
-          <p className="text-sm text-gray-600 mt-1">
-            남은 금액: {formatNumber(afterMaterialCost)}
-          </p>
-        </div>
+          <div className="pb-4 border-b">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              인턴비
+            </label>
+            <input
+              type="number"
+              value={internFee || ''}
+              onChange={handleInternFeeChange}
+              placeholder="0"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+          </div>
 
-        {/* 4단계: 인턴비 */}
-        <div>
-          <p>인턴비</p>
-          <input
-            type="number"
-            value={internFee || ''}
-            onChange={handleInternFeeChange}
-            className="border p-2 w-full"
-          />
-          <p className="text-sm text-gray-600 mt-1">
-            남은 금액: {formatNumber(afterInternFee)}
-          </p>
-        </div>
+          {/* 계산 결과 섹션 */}
+          <div className="pt-4 space-y-3">
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-600">수수료 (85%)</span>
+              <span className="font-medium text-gray-900">-{formatNumber(commission)}</span>
+            </div>
 
-        {/* 5단계: 세금 */}
-        <div>
-          <p>세금 (3.3%)</p>
-          <input
-            type="text"
-            value={formatNumber(tax)}
-            readOnly
-            className="border p-2 w-full bg-gray-100"
-          />
-        </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-600">인센티브</span>
+              <span className="font-medium text-gray-900">-{formatNumber(incentive)}</span>
+            </div>
 
-        {/* 최종: 월급 */}
-        <div>
-          <p className="font-semibold">월급 (정산금액)</p>
-          <input
-            type="text"
-            value={formatNumber(settlementAmount)}
-            readOnly
-            className="border p-2 w-full bg-green-100 font-semibold text-lg"
-          />
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-600">재료비 (10%)</span>
+              <span className="font-medium text-gray-900">-{formatNumber(materialCost)}</span>
+            </div>
+
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-600">인턴비</span>
+              <span className="font-medium text-gray-900">-{formatNumber(internFee)}</span>
+            </div>
+
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-600">세금 (3.3%)</span>
+              <span className="font-medium text-gray-900">-{formatNumber(tax)}</span>
+            </div>
+
+            <div className="pt-4 mt-4 border-t-2">
+              <div className="flex justify-between items-center">
+                <span className="text-lg font-bold text-gray-800">정산 금액</span>
+                <span className="text-2xl font-bold text-blue-600">{formatNumber(settlementAmount)}원</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
